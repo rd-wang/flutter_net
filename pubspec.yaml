@@ -20,7 +20,9 @@ dependencies:
   connectivity: ^3.0.3
 
   roobo_logger:
-    path: ../roobo_logger
+    git:
+      url: git@git.365jiating.com:app_base_project/roobo_logger.git
+      ref: 1.0.0
 
 
 

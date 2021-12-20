@@ -126,10 +126,12 @@ packages:
   roobo_logger:
     dependency: "direct main"
     description:
-      path: "../roobo_logger"
-      relative: true
-    source: path
-    version: "0.0.1"
+      path: "."
+      ref: "1.0.0"
+      resolved-ref: b5e14db6d1adf01e932c707b56537546eac9a68e
+      url: "git@git.365jiating.com:app_base_project/roobo_logger.git"
+    source: git
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
