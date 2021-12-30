@@ -95,13 +95,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.3"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.0"
   meta:
     dependency: transitive
     description:
@@ -123,15 +116,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.2"
-  roobo_logger:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "1.0.0"
-      resolved-ref: b5e14db6d1adf01e932c707b56537546eac9a68e
-      url: "git@git.365jiating.com:app_base_project/roobo_logger.git"
-    source: git
-    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

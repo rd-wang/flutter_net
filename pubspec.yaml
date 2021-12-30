@@ -1,6 +1,6 @@
 name: roobo_net
 description: A new Flutter project.
-version: 1.1.0
+version: 1.2.0
 author:
 homepage:
 publish_to: none
@@ -18,13 +18,6 @@ dependencies:
   crypto: ^3.0.1
   convert: ^3.0.0
   connectivity: ^3.0.3
-
-  roobo_logger:
-    git:
-      url: git@git.365jiating.com:app_base_project/roobo_logger.git
-      ref: 1.0.0
-
-
 
 
 # For information on the generic Dart part of this file, see the

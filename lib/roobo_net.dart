@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:roobo_logger/roobo_logger.dart';
 import 'package:roobo_net/roobo_net_error.dart';
 
 import 'net_state/net_state.dart';
@@ -77,7 +76,7 @@ class Net {
           if (msg == null) {
             msg = response.data['msg'];
           }
-          Logger.i(response.data);
+          print(response.data);
         }
         response.data = ResultData(response.data['data'], code == 0, code, headers: response.headers, msg: msg);
       }
@@ -87,7 +86,7 @@ class Net {
         await NetError.errorFunction('-100');
       } else if (e.type == DioErrorType.cancel) {
         // 主动取消
-        Logger.i("this request is canceled");
+        print("this request is canceled");
       }
 
       if (isOpenProxy) {
@@ -118,7 +117,7 @@ class Net {
       {data, Map queryParameters, Options options, CancelToken cancelToken, ProgressCallback onSendProgress, ProgressCallback onReceiveProgress}) async {
     // response.data 为拦截器返回的内容
     if (NetState.getInstance.netResult == NetConnectResult.unknown || NetState.getInstance.netResult == NetConnectResult.none) {
-      Logger.i("no_net");
+      print("no_net");
       String error = NetError.error('-100');
       return ResultData(error, false, -100, msg: error);
     }
@@ -142,7 +141,7 @@ class Net {
           await _downloadDio.download(urlPath, savePath, onReceiveProgress: onReceiveProgress, options: Options(responseType: ResponseType.json), cancelToken: cancelToken);
       return response.statusCode == 200;
     } catch (e) {
-      Logger.i(e.toString());
+      print(e.toString());
       return false;
     }
   }
