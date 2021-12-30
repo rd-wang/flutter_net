@@ -20,6 +20,7 @@ class NetState {
   static Connectivity _connectivity = Connectivity();
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
   static NetConnectResult _connectResult;
+  static Function tips;
 
   get netResult {
     return _connectResult;
@@ -29,9 +30,14 @@ class NetState {
     _connectResult = result;
   }
 
-  static Future<void> init(Function(ConnectivityResult result) listener) async {
+  static Future<void> init(
+    Function(ConnectivityResult result) listener, {
+    Function(NetConnectResult result) tips,
+  }) async {
     _instance = NetState._();
+    NetState.tips = tips;
     ConnectivityResult result;
+
     try {
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
