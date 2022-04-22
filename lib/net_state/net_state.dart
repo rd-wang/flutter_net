@@ -13,14 +13,14 @@ enum NetConnectResult {
 class NetState {
   NetState._();
 
-  static NetState _instance;
+  static NetState? _instance;
 
-  static NetState get getInstance => _instance;
+  static NetState? get getInstance => _instance;
 
   static Connectivity _connectivity = Connectivity();
-  static StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  static NetConnectResult _connectResult;
-  static Function tips;
+  static StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+  static NetConnectResult? _connectResult;
+  static Function? tips;
 
   get netResult {
     return _connectResult;
@@ -32,7 +32,7 @@ class NetState {
 
   static Future<void> init(
     Function(ConnectivityResult result) listener, {
-    Function(NetConnectResult result) tips,
+    Function(NetConnectResult result)? tips,
   }) async {
     _instance = NetState._();
     NetState.tips = tips;

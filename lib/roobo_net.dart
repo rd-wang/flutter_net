@@ -12,9 +12,9 @@ const String PROXY_IP = "debug_proxy_ip";
 const String PROXY_PORT = "debug_proxy_port";
 
 class Net {
-  static Dio _dio;
-  static Dio _downloadDio;
-  static bool isOpenProxy;
+  static late Dio _dio;
+  static late Dio _downloadDio;
+  static bool? isOpenProxy;
 
   /// hostName 域名
   /// authorization 登录签名
@@ -66,11 +66,11 @@ class Net {
       // 一般只需要处理200的情况，300、400、500保留错误信息
       if (response.statusCode == 200 || response.statusCode == 201) {
         // 业务是否成功的code
-        int code = response.data["result"];
+        int? code = response.data["result"];
         if (errorHandle.containsKey(code.toString())) {
           await NetError.errorFunction(code.toString());
         }
-        String msg;
+        String? msg;
         if (code != 0) {
           msg = NetError.error(code.toString());
           if (msg == null) {
@@ -96,7 +96,7 @@ class Net {
         }
       }
       // 此时的失败不是业务失败
-      return handler.resolve(Response(requestOptions: null, data: e, statusCode: -1010));
+      return handler.resolve(Response(requestOptions: RequestOptions(path: ''), data: e, statusCode: -1010));
     }));
 
     // 由于拦截器队列的执行顺序是FIFO，如果把log拦截器添加到了最前面，则后面拦截器对options的更改就不会被打印（但依然会生效）， 所以建议把log拦截添加到队尾。
@@ -113,16 +113,16 @@ class Net {
   /// data: {"id": 12, "name": "xx"},
   /// options: Options(method: "GET"),
   /// T data : ResponseType  ResultData
-  static Future<ResultData> request<T>(String path,
-      {data, Map queryParameters, Options options, CancelToken cancelToken, ProgressCallback onSendProgress, ProgressCallback onReceiveProgress}) async {
+  static Future<ResultData?> request<T>(String path,
+      {data, Map? queryParameters, Options? options, CancelToken? cancelToken, ProgressCallback? onSendProgress, ProgressCallback? onReceiveProgress}) async {
     // response.data 为拦截器返回的内容
-    if (NetState.getInstance.netResult == NetConnectResult.unknown || NetState.getInstance.netResult == NetConnectResult.none) {
+    if (NetState.getInstance!.netResult == NetConnectResult.unknown || NetState.getInstance!.netResult == NetConnectResult.none) {
       print("no_net");
-      String error = NetError.error('-100');
+      String? error = NetError.error('-100');
       return ResultData(error, false, -100, msg: error);
     }
     Response response = await _dio.request<T>(path,
-        data: data, queryParameters: queryParameters, options: options, cancelToken: cancelToken, onSendProgress: onSendProgress, onReceiveProgress: onReceiveProgress);
+        data: data, queryParameters: queryParameters as Map<String, dynamic>?, options: options, cancelToken: cancelToken, onSendProgress: onSendProgress, onReceiveProgress: onReceiveProgress);
     if (response.statusCode == -1010) {
       return ResultData(response.data, false, response.statusCode, msg: "");
     }
@@ -135,7 +135,7 @@ class Net {
 
 // 下载文件
   static Future<bool> download<T>(String urlPath, String savePath,
-      {ProgressCallback onReceiveProgress, Map<String, dynamic> queryParameters, CancelToken cancelToken, data, Options options}) async {
+      {ProgressCallback? onReceiveProgress, Map<String, dynamic>? queryParameters, CancelToken? cancelToken, data, Options? options}) async {
     try {
       Response response =
           await _downloadDio.download(urlPath, savePath, onReceiveProgress: onReceiveProgress, options: Options(responseType: ResponseType.json), cancelToken: cancelToken);
@@ -153,8 +153,8 @@ class ResultData {
   var headers;
   dynamic model;
   bool isSuccess;
-  String msg;
-  int code;
+  String? msg;
+  int? code;
 
   ResultData(this.data, this.isSuccess, this.code, {this.headers, this.msg});
 
