@@ -6,3 +6,5 @@
 
 ## [2.0.0] - null-safe
 
+## [2.0.1] - 网络超时添加对send和receive的归类Timeout
+

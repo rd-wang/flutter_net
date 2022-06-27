@@ -38,7 +38,7 @@ class Net {
     NetError.init(errorMsg, errorHandle);
     Net.isOpenProxy = isOpenProxy;
     _dio = new Dio(BaseOptions(
-        baseUrl: hostName, method: "POST", contentType: Headers.jsonContentType, responseType: ResponseType.json, connectTimeout: 5000, receiveTimeout: 3000, sendTimeout: 50000));
+        baseUrl: hostName, method: "POST", contentType: Headers.jsonContentType, responseType: ResponseType.json, connectTimeout: 5000, receiveTimeout: 5000, sendTimeout: 50000));
 
     if (isOpenProxy) {
       // More about HttpClient proxy topic please refer to Dart SDK doc.
@@ -82,7 +82,7 @@ class Net {
       }
       return handler.next(response);
     }, onError: (DioError e, handler) async {
-      if (e.type == DioErrorType.connectTimeout) {
+      if (e.type == DioErrorType.connectTimeout || e.type == DioErrorType.receiveTimeout || e.type == DioErrorType.sendTimeout) {
         await NetError.errorFunction('-100');
       } else if (e.type == DioErrorType.cancel) {
         // 主动取消
@@ -92,7 +92,7 @@ class Net {
       if (isOpenProxy) {
         if ((e.error is SocketException) || (e.error is ArgumentError)) {
           await NetError.errorFunction('-100866');
-          init(hostName, authorization, false, proxyData, isLog,errorMsg: errorMsg,errorHandle: errorHandle);
+          init(hostName, authorization, false, proxyData, isLog, errorMsg: errorMsg, errorHandle: errorHandle);
         }
       }
       // 此时的失败不是业务失败
@@ -122,7 +122,12 @@ class Net {
       return ResultData(error, false, -100, msg: error);
     }
     Response response = await _dio.request<T>(path,
-        data: data, queryParameters: queryParameters as Map<String, dynamic>?, options: options, cancelToken: cancelToken, onSendProgress: onSendProgress, onReceiveProgress: onReceiveProgress);
+        data: data,
+        queryParameters: queryParameters as Map<String, dynamic>?,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress);
     if (response.statusCode == -1010) {
       return ResultData(response.data, false, response.statusCode, msg: "");
     }
